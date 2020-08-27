@@ -22,7 +22,7 @@
           <v-col cols="6">
           <v-text-field
             v-model="nameInput"
-            label="Your name goes here"
+            label="Finkle Frankendorf"
             class=" px-6"
             @keydown.enter="addName()"
           ></v-text-field>
