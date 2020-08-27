@@ -1,58 +1,93 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <v-container>
+      <v-card
+        class="mt-10 mb-5"
+        cols="12"
+      >
+        <v-row class=" px-3">
+          <v-col v-for="(name, i) in names" :key="i" cols="4" class="px-6">
+          <v-card class="pa-6 text-center">
+            <h2 class="headline font-weight-bold mb-3">
+              {{name}}
+            </h2>
+          </v-card>
+          </v-col>
+        </v-row>
+        <v-col cols="12">
+        </v-col>
+      </v-card>
+      <v-card>
+        <v-row align="center" justify="center">
+          <v-col cols="6">
+          <v-text-field
+            v-model="nameInput"
+            label="Your name goes here"
+            class=" px-6"
+            @keydown.enter="addName()"
+          ></v-text-field>
+          </v-col>
+            <v-col cols="2">
+              <v-btn @click="addName()">Add Name</v-btn>
+          </v-col>
+        </v-row>
+
+        <v-row justify="center">
+          <v-dialog v-model="winnerPickDialog">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn 
+                class="mb-6"
+                v-bind="attrs"
+                v-on="on"
+                @click="pickWinner()"
+              >Select Winner</v-btn>
+            </template>
+
+            <v-card>
+              <v-row justify="center">
+                <h1 class="my-16">
+                  {{pickWinnerDisplay}}
+                </h1>
+              </v-row>
+            </v-card>
+
+          </v-dialog>
+        </v-row>
+      </v-card>
+  </v-container>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script>
+  export default {
+    name: 'HelloWorld',
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
+    data: () => ({
+      nameInput: "",
+      winnerPickDialog: false,
+      loadedWinner: "Mikey",
+      names: [ "amy", "mikey", "nate", "steve", "yohan", "goku"],
+      pickWinnerMessages: ["Reaching into the hat...", "Hey, thats not a name!!!", "Reaching back into my hat...", "Oh right I put them in the fish bowl, not my hat...", "Reaching into my fish bowl...", "and the winner is..." ],
+      pickWinnerDisplay: "",
+    }),
+    methods: {
+      addName () {
+        this.names.push(this.nameInput);
+        this.nameInput = "";
+      },
+      pickWinner () {
+        this.winnerPickDialog = true;
+        const getNextMessage = () => {
+          setTimeout(() => {
+            if (this.pickWinnerMessages.length > 0) {
+              this.pickWinnerDisplay = this.pickWinnerMessages.shift();
+              getNextMessage();
+            } else {
+              this.pickWinnerDisplay = `${this.loadedWinner}!!!`;
+            }
+          }, 3000);
+        };
+        this.pickWinnerDisplay = this.pickWinnerMessages.shift();
+        getNextMessage();
+      }
+    }
+  }
+</script>
