@@ -1,10 +1,11 @@
 <template>
   <v-container>
       <v-card
+        v-if="names.length > 0" 
         class="mt-10 mb-5"
         cols="12"
       >
-        <v-row class=" px-3">
+        <v-row class="px-3">
           <v-col v-for="(name, i) in names" :key="i" cols="4" class="px-6">
           <v-card class="pa-6 text-center">
             <h2 class="headline font-weight-bold mb-3">
@@ -64,7 +65,7 @@
       nameInput: "",
       winnerPickDialog: false,
       loadedWinner: "Mikey",
-      names: [ "amy", "mikey", "nate", "steve", "yohan", "goku"],
+      names: [],
       pickWinnerMessages: ["Reaching into the hat...", "Hey, thats not a name!!!", "Reaching back into my hat...", "Oh right I put them in the fish bowl, not my hat...", "Reaching into my fish bowl...", "and the winner is..." ],
       pickWinnerDisplay: "",
     }),
